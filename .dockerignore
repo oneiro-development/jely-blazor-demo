@@ -1,0 +1,41 @@
+# Yarn files
+.yarn/
+.yarnrc.yml
+yarn.lock
+node_modules/
+
+# VSCode files
+.vscode/
+
+# C# project-related files
+**/bin/
+**/obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.ide/
+*.nuget.props
+*.nuget.targets
+*.csproj.user
+*.cache
+*.vssscc
+
+# Common files to ignore
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.swp
+*.tmp
+*.orig
+*.rej
+*.cache
+*.pid
+*.seed
+*.map
+*.pid.lock
+
+# Git files
+.git/
+.gitignore

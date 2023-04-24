@@ -1,0 +1,17 @@
+@page "/error"
+@using JelyUI.Components
+@inject NavigationManager _navigationManger
+
+<Title Text="Uh-oh!" Subtext="It looks like the rodents have been up to their mischievous ways again." />
+<p class="subtext" style="padding: 0 50px;">
+    Our team of highly trained cats is on the case, though.
+</p>
+<ImageHeader Src="img/error-rat.jpg" Alt="Error" />
+<Button OnClick="GoBackHome">Go back home</Button>
+
+@code {
+    Task GoBackHome(MouseEventArgs _) {
+        _navigationManger.NavigateTo("/");
+        return Task.CompletedTask;
+    }
+}

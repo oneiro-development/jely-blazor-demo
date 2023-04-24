@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+// Use Material Icons in your styles
+.icon {
+  font-family: 'Material Icons';
+  font-size: 24px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  display: inline-block;
+  line-height: 1;
+  font-feature-settings: 'liga';
+  font-style: normal;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  &.icon-very-large {
+    font-size: 76px;
+  }
+  &.icon-success {
+    color: #5cb85c;
+  }
+  &.icon-danger {
+    color: #d9534f;
+  }
+}

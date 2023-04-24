@@ -1,0 +1,56 @@
+﻿@page "/"
+@inherits ComponentBase
+@implements IDisposable
+
+@using JelyUI.Components
+@using Microsoft.AspNetCore.Components.Forms
+@using Refit
+
+@inject ILogger<Index> _logger
+@inject IJSRuntime _jsRuntime
+@inject IAppStateService _appStateService;
+@inject IFacesApi _facesApi;
+
+@_steps[_appStateService.State.CurrentStep]
+
+@code {
+
+    RenderFragment[] _steps = new RenderFragment[0];
+
+    protected override void OnInitialized() {
+        _steps = _steps.Append(builder => {
+            builder.OpenComponent<Upload>(0);
+            builder.AddAttribute(1, "Icon", "img/id-card.png");
+            builder.AddAttribute(2, "Text", "Upload ID");
+            builder.AddAttribute(3, "Subtext", "Upload an image of your ID");
+            builder.AddAttribute(4, "OnFileSelected", HandleUploadId);
+            builder.CloseComponent();
+        }).Append(builder => {
+            builder.OpenComponent<Upload>(0);
+            builder.AddAttribute(1, "Icon", "img/selfie.png");
+            builder.AddAttribute(2, "Text", "Upload Selfie");
+            builder.AddAttribute(3, "Subtext", "Upload an image of yourself");
+            builder.AddAttribute(4, "OnFileSelected", HandleUploadId);
+            builder.AddAttribute(5, "SupportsWebcam", true);
+            builder.CloseComponent();
+        })
+        .Append(builder => {
+            builder.OpenComponent<Verified>(0);
+            builder.CloseComponent();
+        })
+        .ToArray();
+        _appStateService.OnChange += StateHasChanged;
+    }
+
+    async void HandleUploadId(Stream file) {
+        var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        ms.Position = 0;
+        _appStateService.AddFile(new StreamPart(ms, "image", "image/jpeg"));
+        _appStateService.NextStep();
+    }
+
+    public void Dispose() {
+        _appStateService.OnChange -= StateHasChanged;
+    }
+}

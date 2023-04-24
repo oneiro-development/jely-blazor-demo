@@ -1,0 +1,11 @@
+@namespace JelyUI.Components
+
+<div class="title-wrapper">
+    <h1 class="title">@Text</h1>
+    <p class="subtext">@Subtext</p>
+</div>
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string Subtext { get; set; } = "";
+}

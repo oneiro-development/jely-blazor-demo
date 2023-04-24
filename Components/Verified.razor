@@ -1,0 +1,49 @@
+@namespace JelyUI.Components
+@implements IDisposable
+
+@inject IFacesApi _facesApi
+@inject IAppStateService _appStateService
+@inject NavigationManager _navigationManager
+
+@if(!Loading) {
+    <i style="margin-bottom: 50px;" class="icon icon-very-large icon-@(IsVerified ? "success": "danger")">@(IsVerified ? "verified" : "warning")</i>
+    <Title Text="@Text" Subtext="@Subtext" />
+    <Button OnClick="HandleReset">Reset</Button>
+}
+else {
+    <Title Text="Verifying" Subtext="Please wait while we verify your identity" />
+    <Loader />
+}
+
+@code {
+    string Text =>
+        IsVerified ? "Cool!" : "Uh-oh!";
+    string Subtext =>
+        IsVerified ? "Your identity has been verified" : "Your identity could not be verified";
+    bool IsVerified { get; set; }
+
+    bool Loading { get; set; }
+
+    Task HandleReset(MouseEventArgs _) {
+        _appStateService.Reset();
+        return Task.CompletedTask;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _appStateService.OnChange += StateHasChanged;
+        Loading = true;
+        try {
+            IsVerified = await _facesApi.UploadImage(_appStateService.State.Files);
+        } catch (Exception ex) {
+            _appStateService.Reset();
+            _navigationManager.NavigateTo("/error");
+        }
+        Loading = false;
+    }
+
+    public void Dispose()
+    {
+        _appStateService.OnChange -= StateHasChanged;
+    }
+}

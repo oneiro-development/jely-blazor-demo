@@ -1,0 +1,22 @@
+@namespace JelyUI.Components
+
+<div class="stepper">
+    @foreach (var step in Steps)
+    {
+        <div class="step @(step.IsActive ? "active" : "inactive")">
+            <div class="dot"></div>
+            @* <div class="text">@step.StepText</div> *@
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Step> Steps { get; set; }
+
+    public class Step
+    {
+        public string StepText { get; set; }
+        public bool IsActive { get; set; }
+    }
+}

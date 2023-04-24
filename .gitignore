@@ -1,0 +1,44 @@
+.yarn/**
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Swap the comments on the following lines if you don't wish to use zero-installs
+# Documentation here: https://yarnpkg.com/features/zero-installs
+!.yarn/cache
+#.pnp.*
+
+# C# project-related files
+**/bin/
+**/obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.sln.ide/
+*.nuget.props
+*.nuget.targets
+*.csproj.user
+*.cache
+*.vssscc
+
+# Common files to ignore
+.DS_Store
+Thumbs.db
+*.log
+*.bak
+*.swp
+*.tmp
+*.orig
+*.rej
+*.cache
+*.pid
+*.seed
+*.map
+*.pid.lock
+
+# Common folders to ignore
+wwwroot/*
+!wwwroot/img/

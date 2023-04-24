@@ -1,0 +1,36 @@
+﻿@inherits LayoutComponentBase
+@using JelyUI.Components
+
+@inject IAppStateService _appStateService;
+
+<main> 
+    @Body
+
+    <Stepper Steps="@Steps" />
+</main>
+<Footer>
+    <a href="/" aria-label="home">
+        <img src="img/logo.png" alt="Logo">
+    </a>
+    <br />
+    <p>&copy; @DateTime.Now.Year Jely All rights reserved.</p>
+</Footer>
+
+@code {
+
+    protected override void OnInitialized()
+    {
+        _appStateService.OnChange += () => {
+            foreach(var step in Steps)
+                step.IsActive = false;
+            Steps[_appStateService.State.CurrentStep].IsActive = true;
+        };
+        _appStateService.OnChange += StateHasChanged;
+    }
+
+    private List<Stepper.Step> Steps = new List<Stepper.Step> {
+        new Stepper.Step { StepText = "Step 1", IsActive = true },
+        new Stepper.Step { StepText = "Step 1", IsActive = false },
+        new Stepper.Step { StepText = "Step 1", IsActive = false }
+    };
+}

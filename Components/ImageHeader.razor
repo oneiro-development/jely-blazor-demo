@@ -1,0 +1,10 @@
+@namespace JelyUI.Components
+@inherits ComponentBase
+<div class="image-wrapper">
+    <img src="@Src" alt="@Alt" />
+</div>
+
+@code {
+    [Parameter] public string Src { get; set; } = "";
+    [Parameter] public string Alt { get; set; } = "";
+}

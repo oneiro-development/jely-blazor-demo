@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- exclude all Content items from being watched -->
+    <!-- <Content Update="@(Content)" Watch="false" /> -->
+  </ItemGroup>
+  <ItemGroup>
+    <!--For automatic compile on save of the scss use
+    cd ./src/MudBlazor
+    dotnet watch webcompiler ./Styles/MudBlazor.scss -c excubowebcompiler.json
+    -->
+    <Watch Include="**\*.scss" />
+    <Watch Include="**\*.ts" />
+    <Watch Remove="wwwroot\**\*" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.0.4">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Refit" Version="6.3.2" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
+  </ItemGroup>
+
+  <!-- <ItemGroup>
+    <JSFilesToDelete Include="wwwroot/js/**/*.js" />
+    <CSSFilesToDelete Include="wwwroot/css/**/*.css" />
+    <MapFilesToDelete Include="wwwroot/js/**/*.js.map" />
+  </ItemGroup>
+
+  <Target Name="CleanOutputFolders" BeforeTargets="Build">
+    <Delete Files="@(JSFilesToDelete);@(CSSFilesToDelete);@(MapFilesToDelete)" />
+  </Target> -->
+
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts/**/*.ts" />
+  </ItemGroup>
+
+  <Target Name="WatchTypeScriptFiles" BeforeTargets="Run;Watch" Condition="'$(Configuration)'=='Debug'">
+    <Exec Command="npx tsc --watch" />
+  </Target>
+
+  <Target Name="CompileSassFiles" BeforeTargets="Build">
+    <Exec Command="sass --style=compressed --no-source-map Styles/main.scss wwwroot/css/main.css" Condition="'$(Configuration)'=='Release'" />
+    <Exec Command="sass --style=expanded --no-source-map Styles/main.scss wwwroot/css/main.css" Condition="'$(Configuration)'!='Release'" />
+  </Target>
+
+  <Target Name="WatchSassFiles" BeforeTargets="Run;Watch" Condition="'$(Configuration)'=='Debug'">
+    <Exec Command="sass --style=compressed --no-source-map --watch Styles/main.scss wwwroot/css/main.css" />
+  </Target>
+
+</Project>

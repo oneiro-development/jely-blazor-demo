@@ -1,0 +1,60 @@
+@namespace JelyUI.Components
+
+@inject IJSRuntime _jsRuntime
+@inject ILogger<Webcam> _logger
+
+<Title Text="Capture picture" Subtext="Take an image of yourself" />
+
+<video class="video @(!Loading ? "video-visible" : "")" @ref="VideoElement" autoplay playsinline></video>
+@if(!Loading) {
+    <i @onclick="Capture" class="icon" style="color: white; margin-top: -38px;z-index: 100;cursor: pointer;">camera</i>
+    <canvas @ref="CanvasElement" style="display:none"></canvas>
+}
+@if(Loading) {
+    <div class="loader-wrapper">
+        <Loader />
+    </div>
+}
+
+@code {
+    ElementReference VideoElement;
+    ElementReference CanvasElement;
+    IJSObjectReference WebcamInterop;
+    [Parameter] public Action<Stream> OnImageCapture { get; set; } = _ => { };
+    bool Loading { get; set; }
+
+    string imageData = "";
+
+        protected override Task OnInitializedAsync()
+        {
+            Loading = true;
+            return Task.CompletedTask;
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender) {
+            WebcamInterop = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/_webcam.js");
+            await WebcamInterop.InvokeVoidAsync("captureWebcam", VideoElement, CanvasElement, DotNetObjectReference.Create(this));
+        }
+    }
+
+    async Task Capture(MouseEventArgs _) {
+        await WebcamInterop.InvokeVoidAsync("captureImage", VideoElement, CanvasElement, DotNetObjectReference.Create(this));
+        var ms = new MemoryStream(Convert.FromBase64String(imageData));
+        await StopWebcam();
+        OnImageCapture(ms);
+    }
+
+    async Task StopWebcam() =>
+        await WebcamInterop.InvokeVoidAsync("stopWebcam", VideoElement);
+
+    [JSInvokable]
+    public void ReceiveStringChunk(string chunk) =>
+        imageData += chunk;
+
+    [JSInvokable]
+    public void Loaded() {
+        Loading = false;
+        StateHasChanged();
+    }
+}

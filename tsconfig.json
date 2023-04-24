@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
+      "noImplicitAny": true,
+      "noEmitOnError": true,
+      "removeComments": false,
+      "sourceMap": false,
+      "outDir": "wwwroot/js",
+      "moduleResolution": "Classic",
+      "module": "ESNext",
+      "target": "ES2022",
+    },
+    "exclude": [
+      "node_modules",
+      "wwwroot",
+      "*.scss",
+      "bin/**/*", 
+      "obj/**/*" 
+    ]
+  }
+  

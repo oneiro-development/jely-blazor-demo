@@ -1,0 +1,42 @@
+@namespace JelyUI.Components
+@inherits ComponentBase
+@using JelyUI.Components
+@using Microsoft.AspNetCore.Components.Forms
+
+@inject ILogger<Index> _logger
+@inject IJSRuntime _jsRuntime
+
+@if(SupportsWebcam && UseWebcam) {
+    <Webcam OnImageCapture="OnFileSelected" />
+}
+else {
+    <Title Text="@Text" Subtext="@Subtext" />
+    <ImageHeader Src="@Icon" />
+    <div>
+        <Button OnClick="HandleClick"><i class="icon">file_upload</i></Button>
+        @if(SupportsWebcam) {
+            <Button OnClick="() => UseWebcam = true"><i class="icon">photo_camera</i></Button>
+        }
+    </div>
+    <InputFile @ref="_fileInput" OnChange="HandleFileChange" style="display: none;" />
+}
+
+@code {
+    [Parameter] public string Text { get; set; }
+    [Parameter] public string Subtext { get; set; }
+    [Parameter] public string Icon { get; set; }
+
+    [Parameter] public Action<Stream> OnFileSelected { get; set; } = _ => { };
+    [Parameter] public bool SupportsWebcam { get; set; } = false;
+    bool UseWebcam { get; set; } = false;
+
+    InputFile _fileInput;
+
+    async Task HandleClick(MouseEventArgs e) {
+        await (await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/_upload.js"))
+            .InvokeVoidAsync("openUpload", _fileInput.Element);
+    }
+
+    void HandleFileChange(InputFileChangeEventArgs e) =>
+        OnFileSelected(e.File.OpenReadStream());
+}

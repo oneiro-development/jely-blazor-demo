@@ -1,0 +1,66 @@
+$stepper-active-color: #5474af;
+$stepper-inactive-color: #A9A9A9;
+
+.stepper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-self: flex-end;
+    margin-top: auto;
+    width: 100%;
+  }
+  
+  .step {
+    display: flex;
+    flex-direction: row;
+    margin: 0 10px;
+    align-items: center;
+    font-size: 14px;
+    position: relative;
+  
+    &.active {
+      color: $stepper-active-color;
+    }
+  
+    &.inactive {
+      color: $stepper-inactive-color;
+    }
+  }
+  
+  .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    border: 2px solid $stepper-inactive-color;
+    position: relative;
+    margin-bottom: 8px;
+    background-color: $stepper-inactive-color;
+  
+    &::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: $stepper-inactive-color;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+  }
+  
+  .step.active .dot {
+    border-color: $stepper-active-color;
+    background-color: $stepper-active-color;
+  
+    &::after {
+      display: block;
+      background-color: $stepper-active-color;
+    }
+  }
+  
+  .text {
+    text-align: center;
+  }
+  

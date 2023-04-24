@@ -1,0 +1,9 @@
+@namespace JelyUI.Components
+
+<button class="button" @onclick="OnClick" @attributes="Attributes">@ChildContent</button>
+
+@code {
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+    [Parameter] public EventCallback<MouseEventArgs> OnClick { get; set; }
+    [Parameter(CaptureUnmatchedValues = true)] public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+}
