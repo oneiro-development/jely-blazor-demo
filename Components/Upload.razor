@@ -30,17 +30,30 @@ else {
     [Parameter] public Action<Stream> OnFileSelected { get; set; } = _ => { };
     [Parameter] public bool SupportsWebcam { get; set; } = false;
     bool UseWebcam { get; set; } = false;
-
     InputFile _fileInput;
+    IJSObjectReference _module;
+    string _imageData;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender) {
+            _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/_upload.js");
+        }
+    }
 
     async Task HandleClick(MouseEventArgs e) {
-        await (await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/_upload.js"))
-            .InvokeVoidAsync("openUpload", _fileInput.Element);
+        await _module.InvokeVoidAsync("openUpload", _fileInput.Element);
     }
 
-    void HandleFileChange(InputFileChangeEventArgs e) {
-        if(e.File.Size > 521000*10)
+    async Task HandleFileChange(InputFileChangeEventArgs e) {
+        await _module.InvokeVoidAsync("getResizedImage", _fileInput.Element, 800, 800, DotNetObjectReference.Create(this));
+        var ms = new MemoryStream(Convert.FromBase64String(_imageData));
+        if(ms.Length > 521000)
             _navigationManager.NavigateTo("/error");
-        OnFileSelected(e.File.OpenReadStream(521000*10));
+        _imageData = "";
+        OnFileSelected(ms);
     }
+
+    [JSInvokable]
+    public void ReceiveStringChunk(string chunk) =>
+        _imageData += chunk;
 }
