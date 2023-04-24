@@ -23,5 +23,5 @@ jobs:
     - name: Build the Docker image
       run: | 
         docker build . --file Dockerfile --tag ${{ secrets.ACR_LOGIN_SERVER }}/jely-blazor-demo:${{ github.sha }}
-        docker push ${{ secrets.ACR_LOGIN_SERVER }}/jely-blazor:${{ github.sha }}
+        docker push ${{ secrets.ACR_LOGIN_SERVER }}/jely-blazor-demo:${{ github.sha }}
       
