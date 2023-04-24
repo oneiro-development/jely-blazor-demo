@@ -5,6 +5,7 @@
 
 @inject ILogger<Index> _logger
 @inject IJSRuntime _jsRuntime
+@inject NavigationManager _navigationManager
 
 @if(SupportsWebcam && UseWebcam) {
     <Webcam OnImageCapture="OnFileSelected" />
@@ -37,6 +38,9 @@ else {
             .InvokeVoidAsync("openUpload", _fileInput.Element);
     }
 
-    void HandleFileChange(InputFileChangeEventArgs e) =>
-        OnFileSelected(e.File.OpenReadStream());
+    void HandleFileChange(InputFileChangeEventArgs e) {
+        if(e.File.Size > 521000*10)
+            _navigationManager.NavigateTo("/error");
+        OnFileSelected(e.File.OpenReadStream(521000*10));
+    }
 }

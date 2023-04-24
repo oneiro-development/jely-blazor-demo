@@ -1,6 +1,7 @@
 @page "/error"
 @using JelyUI.Components
 @inject NavigationManager _navigationManger
+@inject IAppStateService _appStateService
 
 <Title Text="Uh-oh!" Subtext="It looks like the rodents have been up to their mischievous ways again." />
 <p class="subtext" style="padding: 0 50px;">
@@ -12,6 +13,7 @@
 @code {
     Task GoBackHome(MouseEventArgs _) {
         _navigationManger.NavigateTo("/");
+        _appStateService.Reset();
         return Task.CompletedTask;
     }
 }
