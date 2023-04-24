@@ -4,21 +4,23 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>40c7f0e4-749b-4f2b-90e4-76cedf02c64b</UserSecretsId>
   </PropertyGroup>
+
   <ItemGroup>
-    <!-- exclude all Content items from being watched -->
-    <!-- <Content Update="@(Content)" Watch="false" /> -->
+    
+    
   </ItemGroup>
+
   <ItemGroup>
-    <!--For automatic compile on save of the scss use
-    cd ./src/MudBlazor
-    dotnet watch webcompiler ./Styles/MudBlazor.scss -c excubowebcompiler.json
-    -->
     <Watch Include="**\*.scss" />
     <Watch Include="**\*.ts" />
     <Watch Remove="wwwroot\**\*" />
   </ItemGroup>
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.24" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.53.0" />
     <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="5.0.4">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -26,16 +28,6 @@
     <PackageReference Include="Refit" Version="6.3.2" />
     <PackageReference Include="Refit.HttpClientFactory" Version="6.3.2" />
   </ItemGroup>
-
-  <!-- <ItemGroup>
-    <JSFilesToDelete Include="wwwroot/js/**/*.js" />
-    <CSSFilesToDelete Include="wwwroot/css/**/*.css" />
-    <MapFilesToDelete Include="wwwroot/js/**/*.js.map" />
-  </ItemGroup>
-
-  <Target Name="CleanOutputFolders" BeforeTargets="Build">
-    <Delete Files="@(JSFilesToDelete);@(CSSFilesToDelete);@(MapFilesToDelete)" />
-  </Target> -->
 
   <ItemGroup>
     <TypeScriptCompile Include="Scripts/**/*.ts" />
