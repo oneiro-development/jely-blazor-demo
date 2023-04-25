@@ -43,6 +43,10 @@ else {
     }
 
     async Task HandleFileChange(InputFileChangeEventArgs e) {
+
+        if(e.File.ContentType is not "image/jpg" and not "image/jpeg" and not "image/png")
+            _navigationManager.NavigateTo("/error");
+            
         await _module.InvokeVoidAsync("getResizedImage", _fileInput.Element, 800, 800, DotNetObjectReference.Create(this));
         var ms = new MemoryStream(Convert.FromBase64String(_imageData));
         if(ms.Length > 521000)
