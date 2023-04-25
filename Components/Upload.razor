@@ -16,7 +16,7 @@ else {
     <div style="display: flex;flex-direction: row;">
         <label for="file-input" class="button">
             <i class="icon">file_upload</i>
-            <InputFile id="file-input" @ref="_fileInput" OnChange="HandleFileChange" style="display: none;" />
+            <InputFile id="file-input" accept="image/jpg,image/png" @ref="_fileInput" OnChange="HandleFileChange" style="display: none;" />
         </label>
         @if(SupportsWebcam) {
             <Button OnClick="() => UseWebcam = true"><i class="icon">photo_camera</i></Button>
