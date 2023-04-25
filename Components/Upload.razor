@@ -13,13 +13,15 @@
 else {
     <Title Text="@Text" Subtext="@Subtext" />
     <ImageHeader Src="@Icon" />
-    <div>
-        <Button OnClick="HandleClick"><i class="icon">file_upload</i></Button>
+    <div style="display: flex;flex-direction: row;">
+        <label for="file-input" class="button">
+            <i class="icon">file_upload</i>
+            <InputFile id="file-input" @ref="_fileInput" OnChange="HandleFileChange" style="display: none;" />
+        </label>
         @if(SupportsWebcam) {
             <Button OnClick="() => UseWebcam = true"><i class="icon">photo_camera</i></Button>
         }
     </div>
-    <InputFile @ref="_fileInput" OnChange="HandleFileChange" style="display: none;" />
 }
 
 @code {
@@ -38,10 +40,6 @@ else {
         if(firstRender) {
             _module = await _jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/_upload.js");
         }
-    }
-
-    async Task HandleClick(MouseEventArgs e) {
-        await _module.InvokeVoidAsync("openUpload", _fileInput.Element);
     }
 
     async Task HandleFileChange(InputFileChangeEventArgs e) {

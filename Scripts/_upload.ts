@@ -1,5 +1,3 @@
-export const openUpload = (element: HTMLInputElement) =>
-    element.click();
 
 export const getResizedImage = async (element: HTMLInputElement, maxWidth: number, maxHeight: number, dotnetObject: any) => {
     const result = await new Promise<string>(resolve => {
@@ -13,16 +11,12 @@ export const getResizedImage = async (element: HTMLInputElement, maxWidth: numbe
                 let width = img.width;
                 let height = img.height;
 
-                if (width > height) {
-                    if (width > maxWidth) {
-                        height *= maxWidth / width;
-                        width = maxWidth;
-                    }
-                } else {
-                    if (height > maxHeight) {
-                        width *= maxHeight / height;
-                        height = maxHeight;
-                    }
+                if (width > height && width > maxWidth) {
+                    height *= maxWidth / width;
+                    width = maxWidth;
+                } else if (height > maxHeight) {
+                    width *= maxHeight / height;
+                    height = maxHeight;
                 }
 
                 canvas.width = width;
@@ -37,7 +31,7 @@ export const getResizedImage = async (element: HTMLInputElement, maxWidth: numbe
 
     const chunkSize = 32000
     const numberOfChunks = Math.ceil(result.length / chunkSize)
-    
+
     for(let i = 0; i < numberOfChunks; i++) {
         const start = i * chunkSize
         const end = start + chunkSize
